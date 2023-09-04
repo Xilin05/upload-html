@@ -1,0 +1,277 @@
+:root {
+  --main-color: rgb(58, 134, 255);
+  --main-color-light-1: rgba(58, 134, 255, 0.9);
+  --main-color-light-2: rgba(58, 134, 255, 0.7);
+  --main-color-light-3: rgba(58, 134, 255, 0.55);
+  --main-color-light-4: rgba(58, 134, 255, 0.4);
+  --main-color-light-5: rgba(58, 134, 255, 0.1);
+  --main-color-strong: rgb(47, 120, 237);
+  --secondary-color: rgb(75, 165, 255);
+  --secondary-color-light-3: rgba(75, 165, 255, 0.55);
+  --secondary-color-light-4: rgba(75, 165, 255, 0.4);
+  --secondary-color-light-5: rgba(75, 165, 255, 0.1);
+  --thirdary-color: rgb(107, 181, 255);
+  --bg-color: #f4f7fc;
+  --bg-color-strong: #ebeef5;
+  --bg-color-light: rgb(248, 250, 253);
+  --text-color: #3a3f63;
+  --tip-text-color: #858ebd;
+  --success: #52c41a;
+  --success-light-4: rgba(83, 196, 26, 0.4);
+  --success-light-5: rgba(83, 196, 26, 0.1);
+  --warning: #ffb243;
+  --danger: #ff4d4f;
+  --hot: #fe5700;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  /* background-color: #eee; */
+}
+
+*::-webkit-scrollbar-thumb {
+  /* background-color: rgb(193, 193, 193); */
+  background-color: rgb(235, 234, 238);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(225, 224, 228);
+  /* background-color: #a8a8a8; */
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: rgb(215, 214, 218);
+  /* background-color: #787878; */
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #eee;
+}
+
+body,
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.main-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--text-color);
+  padding: 12px;
+  box-sizing: border-box;
+  background-color: var(--bg-color);
+}
+.main-container .upload-box {
+  position: relative;
+  width: 600px;
+  height: 88vh;
+  padding: 24px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 0px 0px 24px 6px var(--bg-color-strong);
+}
+.main-container .upload-box .drag-click-box {
+  width: 100%;
+  height: 200px;
+  line-height: 28px;
+  border: 2px dashed var(--main-color);
+  border-radius: 10px;
+  box-sizing: border-box;
+  background-color: white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+}
+.main-container .upload-box .drag-click-box:hover {
+  border-color: var(--main-color-light-2);
+  background-color: var(--bg-color-light);
+  transition: all 0.2s ease-in-out;
+}
+.main-container .upload-box .drag-click-box .upload-btn {
+  display: block;
+  width: 210px;
+  height: auto;
+  color: white;
+  font-weight: bold;
+  border-radius: 10px;
+  border: none;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: opacity 0.15s ease-in-out;
+}
+.main-container .upload-box .drag-click-box .upload-btn:hover {
+  opacity: 0.88;
+  transition: opacity 0.15s ease-in-out;
+}
+.main-container .upload-box .drag-click-box .upload-btn:active {
+  opacity: 1;
+  transition: opacity 0.15s ease-in-out;
+}
+.main-container .upload-box .drag-click-box .svg-upload {
+  font-size: 48px;
+  color: var(--main-color);
+  margin-bottom: 16px;
+}
+.main-container .upload-box .file-list-box {
+  width: 100%;
+  height: calc(100% - 216px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin-top: 12px;
+}
+.main-container .upload-box .file-list-box .file-card {
+  overflow: hidden;
+  background: white;
+  position: relative;
+  z-index: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px 8px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+.main-container .upload-box .file-list-box .file-card:not(:last-child) {
+  margin-bottom: 8px;
+}
+.main-container .upload-box .file-list-box .file-card:hover {
+  background-color: var(--bg-color-light);
+  transition: all 0.2s ease-in-out;
+}
+.main-container .upload-box .file-list-box .file-card .svg-excel-file {
+  width: 3em;
+  height: 3em;
+  margin-right: 8px;
+}
+.main-container .upload-box .file-list-box .file-card .img-viewer {
+  width: 42px;
+  height: 42px;
+  margin-right: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.main-container .upload-box .file-list-box .file-card .img-viewer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.main-container .upload-box .file-list-box .file-card .file-info {
+  flex: 1;
+}
+.main-container .upload-box .file-list-box .file-card .file-info .size {
+  font-size: 12px;
+  color: var(--tip-text-color);
+}
+.main-container .upload-box .file-list-box .file-card .file-operations {
+  width: 70px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.main-container .upload-box .file-list-box .file-card .file-operations .svg-operation {
+  font-size: 22px;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 4px;
+  box-sizing: border-box;
+  transition: background 0.2s ease-in-out;
+}
+.main-container .upload-box .file-list-box .file-card .file-operations .svg-operation:hover {
+  background-color: var(--secondary-color-light-5);
+  transition: background 0.2s ease-in-out;
+}
+.main-container .upload-box .file-list-box .file-card .progress-bg {
+  position: absolute;
+  left: -100%;
+  height: 100%;
+  width: 100%;
+  border-radius: 8px;
+  display: inline-block;
+  background-color: var(--secondary-color-light-5);
+  transition: 0.2s ease-in-out;
+}
+.main-container .upload-box .file-list-box .file-card .progress-box {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  overflow: hidden;
+  margin-top: 6px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  background-color: var(--bg-color-strong);
+}
+.main-container .upload-box .file-list-box .file-card .progress-box .percent-bar {
+  position: absolute;
+  left: -100%;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+}
+
+.popover-bubble {
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 0;
+  padding: 20px 12px;
+  font-size: 20px;
+  line-height: 26px;
+  color: #c0e3ff;
+  background: #122648;
+  border: 1px solid #4e637e;
+  border-radius: 10px;
+}
+.popover-bubble::before, .popover-bubble::after {
+  position: absolute;
+  bottom: -20px;
+  left: calc(50% - 10px);
+  display: block;
+  font-size: 0;
+  line-height: 0;
+  border-color: #4e637e transparent transparent;
+  border-style: solid;
+  border-width: 10px;
+  content: "";
+}
+.popover-bubble::after {
+  bottom: -19px;
+  border-color: #122648 transparent transparent;
+}
+
+.primary {
+  color: var(--main-color);
+}
+
+.success {
+  color: var(--success);
+}
+
+.warning {
+  color: var(--warning);
+}
+
+.danger {
+  color: var(--danger);
+}
+
+.hot {
+  color: var(--hot);
+}
+
+.linear-gradient-main {
+  background: linear-gradient(45deg, var(--main-color), var(--secondary-color));
+}/*# sourceMappingURL=index.min.css.map */
