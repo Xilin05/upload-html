@@ -246,10 +246,6 @@ document
 
 // 获取dom元素
 // let draggableRef = document.getElementById("drop")
-// 文件流数组
-let fileBlodArr = []
-// 文件数组
-let fileArr = []
 // 拖拽上传事件
 async function handleEvent(event) {
   // 阻止事件的默认行为
@@ -257,6 +253,11 @@ async function handleEvent(event) {
   if (event.type === 'drop') {
     // 文件进入并松开鼠标,文件边框恢复正常
     draggableRef.style.borderColor = '#a89b9b'
+
+    // 文件数组
+    let fileArr = []
+    // 文件流数组
+    let fileBlodArr = []
 
     console.log('event.dataTransfer.files', event.dataTransfer.files)
     for (let file of event.dataTransfer.files) {
