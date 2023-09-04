@@ -62,8 +62,7 @@ function insertHTMLDOM(list = []) {
       </div>
       <div class="file-info">
         <div class="name">
-          <div class="text">${f.name}</div>
-          <div class="more-btn">...查看更多</div>
+          ${f.name}
         </div>
         <div class="size">${f.size}</div>
       </div>
@@ -77,6 +76,9 @@ function insertHTMLDOM(list = []) {
     </div>
     `
   })
+
+  // <div class="text">${f.name}</div>
+  // <div class="more-btn">...查看更多</div>
 
   fileListRef.insertAdjacentHTML('beforeend', domStr)
 

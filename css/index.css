@@ -209,10 +209,13 @@ html {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
+  overflow: hidden;
 }
 .main-container .upload-box .file-list-box .file-card .file-info .name {
-  position: relative;
+  text-overflow: ellipsis;
   overflow: hidden;
+  word-break: break-all;
+  white-space: nowrap;
 }
 .main-container .upload-box .file-list-box .file-card .file-info .name .text {
   color: #1f1f1f;
