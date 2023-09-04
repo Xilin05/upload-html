@@ -347,6 +347,8 @@ html {
   // box-shadow: 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
   filter: drop-shadow(0px 9px 12px rgba(0, 0, 0, 0.15));
 
+  transition: opacity 0.2s ease-in-out;
+
   &::before,
   &::after {
     position: absolute;
@@ -365,6 +367,16 @@ html {
     bottom: -14px;
     border-color: white transparent transparent;
   }
+}
+
+.opacity-show {
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.opacity-hidden {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .primary {

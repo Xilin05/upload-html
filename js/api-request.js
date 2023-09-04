@@ -5,11 +5,18 @@ async function getFileListAPI() {
 
   if (status === 200) {
     // alert('请求成功')
-    console.log(data)
     return data || []
   }
 
   return []
+}
+
+async function uploadFilesAPI(param = {}) {
+  const res = await fetchAjax('/upload/images', param, {
+    method: 'POST'
+  })
+
+  return res
 }
 
 function downloadAction(fileName, url) {

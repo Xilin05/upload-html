@@ -54,13 +54,11 @@ const setRequestConfig = (param = {}, options = {}) => {
 
 // fetch的Ajax请求
 const fetchAjax = async (url, param = {}, options = {}) => {
-  const domain = window.location.host
-  console.log('domain', domain)
+  // const domain = window.location.host
+  // console.log('domain', domain)
   // 设置请求对象的配置信息
   const requestConfig = setRequestConfig(param, options)
   const request = new Request(BASE_URL + url, requestConfig)
-
-  console.log('request', request)
   // 超时函数
   let abortId
   let timeout = false

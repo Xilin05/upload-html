@@ -39,6 +39,14 @@
           拖拽文件至此上传
           <br />
           或
+          <input
+            id="uploadInputRef"
+            type="file"
+            name="files"
+            multiple
+            accept=".jpg,.jpeg,.png,.webp,.gif,.svg,"
+            style="display: none"
+          />
           <button id="uploadBtnRef" class="upload-btn linear-gradient-main">
             点击上传
           </button>
@@ -107,7 +115,6 @@
     <script src="./lib/ViewerJs/viewer.min.js"></script>
     <script src="./js/fetch.js"></script>
     <script src="./js/api-request.js"></script>
-    <script src="./js/index.js"></script>
     <script>
       var fileList = []
       var tempDomIds = []
@@ -115,6 +122,9 @@
         url: 'data-original'
       })
 
+      var draggableRef = document.getElementById('draggableRef')
+      var uploadInputRef = document.getElementById('uploadInputRef')
+      var uploadBtnRef = document.getElementById('uploadBtnRef')
       var statusBubble = document.getElementById('status-tip')
       var downloadBubble = document.getElementById('download-tip')
       var contentBubble = document.getElementById('content-tip')
@@ -134,27 +144,12 @@
       //   console.log(file)
       // })
 
-      // btn3.addEventListener('click', async () => {
-      //   // 构造FormData表单对象
-      //   const formData = new FormData(document.querySelector('#form'))
-      //   formData.append('file', document.querySelector('#file1').files[0])
-      //   formData.append('file', document.querySelector('#file2').files[0])
-
-      //   // 🤠同时提交文件和表单数据到后台,获取响应
-      //   const result = await fetchAjax(
-      //     'http://localhost:8082/wjec/file/receiveData',
-      //     formData
-      //   )
-      //   console.log(result)
-      // })
-
       // 检测是否支持File API
-      if (window.File && window.FileReader && window.FileList && window.Blob) {
-        //  支持
-        console.log('支持')
-      } else {
-        alert('不支持')
-      }
+      // if (window.File && window.FileReader && window.FileList && window.Blob) {
+      //   console.log('支持')
+      // } else {
+      //   alert('不支持')
+      // }
 
       // const fragment = document.createDocumentFragment()
       // for (let i = 0; i < 1000; i++) {
@@ -164,5 +159,6 @@
       // }
       // fileListRef.appendChild(fragment)
     </script>
+    <script src="./js/index.js"></script>
   </body>
 </html>
