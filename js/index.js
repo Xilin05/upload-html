@@ -201,7 +201,14 @@ function hiddenTipBubble(e) {
 }
 
 document.getElementById('uploadBtnRef').addEventListener('click', e => {
-  uploadInputRef.click()
+  // uploadInputRef.click()
+  let target = document.getElementsByClassName('message-box')
+  console.log('target', target)
+  target[0].classList.add('message-show')
+
+  setTimeout(() => {
+    target[0].classList.remove('message-show')
+  }, 3000)
 })
 
 document
