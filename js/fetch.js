@@ -1,6 +1,8 @@
 const LOCATION = window.location
 // const BASE_URL = `http://dingding.shining98.top:5012`
-const BASE_URL = `${LOCATION.protocol}//${LOCATION.hostname}:5012`
+// const BASE_URL = `${LOCATION.protocol}//${LOCATION.hostname}:5012`
+const BASE_URL = `https://127.0.01:5012`
+
 // 默认配置项
 const fetchOptions = {
   headers: {

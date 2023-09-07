@@ -28,48 +28,45 @@ function initDomStr(payload) {
   // <div class="text">${f.name}</div>
   // <div class="more-btn">...查看更多</div>
   return `
-    <div data-uid="${payload.uid}" class="file-card">
+    <div data-uid="${payload?.uid}" class="file-card">
     <svg class="file-icon svg-excel-file" aria-hidden="true" style="display: none;">
       <use xlink:href="#icon-Excel"></use>
     </svg>
-    <div id="img-box" class="img-viewer" style="background-color: #464646; background: url('${payload.img_url}') no-repeat; background-size: cover; background-position: center;">
+    <div id="img-box" class="img-viewer" style="background-color: #464646; background: url('${
+      payload?.img_url
+    }') no-repeat; background-size: cover; background-position: center;">
       <img
         loading="lazy"
-        id="imageViewerRef-${payload.uid}"
-        data-original="${payload.img_url}"
-        src="${payload.img_url}"
-        alt="${payload.name}"
+        id="imageViewerRef-${payload?.uid}"
+        data-original="${payload?.img_url}"
+        src="${payload?.img_url}"
+        alt="${payload?.name}"
         style="opacity: 0;"
       />
     </div>
     <div class="file-info">
       <div class="name">
-        ${payload.name}
+        ${payload?.name}
       </div>
-      <div class="size">${payload.size}</div>
+      <div class="size">${payload?.size}</div>
     </div>
     <div class="file-operations">
-      <i id="download-btn=${payload.uid}" class="svg-operation primary iconfont icon-xiazai"></i>
-      <i id="success-status=${payload.uid}" class="svg-operation success iconfont icon-check"></i>
-      <i id="warning-status=${payload.uid}"class="svg-operation warning iconfont icon-note" style="display: none;"></i>
+      <i id="download-btn=${payload?.uid}" class="${
+    payload?.preview ? 'hidden' : ''
+  } svg-operation primary iconfont icon-xiazai"></i>
+      <i id="success-status=${payload?.uid}" class="${
+    payload?.preview ? 'hidden' : ''
+  } svg-operation success iconfont icon-check"></i>
+      <i id="warning-status=${payload?.uid}" class="${
+    payload?.preview ? 'hidden' : ''
+  } svg-operation warning iconfont icon-note" style="display: none;"></i>
+      <i id="loading-status=${payload?.uid}" class="${
+    payload?.preview ? '' : 'hidden'
+  } svg-operation primary iconfont icon-loading03 animation-rotate"></i>
     </div>
-
     <span class="progress-bg" ></span>
   </div>
   `
-}
-
-async function getUserInfo() {
-  // 🤠发送POST请求,获取json数据
-  // const result = await fetchAjax('https://api.github.com/users/Xilin05')
-  const { status, msg, data } = await fetchAjax(
-    'https://www.fastmock.site/mock/c273bd037cac88380de2ec9776d4ce46/user/userinfo'
-  )
-
-  if (status === 200) {
-    // alert('请求成功')
-    // console.log(data)
-  }
 }
 
 function insertHTMLDOM(list = []) {
@@ -94,6 +91,38 @@ function insertHTMLDOM(list = []) {
       svgDOMList[i].addEventListener('mouseleave', hiddenTipBubble)
     }
   }
+}
+
+function asyncOnload(file) {
+  let reader = new FileReader()
+  return new Promise((resolve, reject) => {
+    reader.onload = event => {
+      let info = {
+        preview: true,
+        uid: GenNonDuplicateID(),
+        img_url: event.target.result,
+        size: formatSize(file?.size),
+        name: file?.name
+      }
+
+      if (initDomStr(info)) {
+        resolve(initDomStr(info))
+      } else {
+        reject('')
+      }
+    }
+    reader.readAsDataURL(file)
+  })
+}
+
+async function insertBeforeDom(fileList) {
+  let tempStr = ''
+
+  for (let index = 0; index < fileList.length; index++) {
+    const f = fileList[index]
+    tempStr += await asyncOnload(f)
+  }
+  fileListRef.insertAdjacentHTML('afterbegin', tempStr)
 }
 
 async function generateImageViewer(e) {
@@ -146,6 +175,7 @@ function showTipBubble(e) {
     downloadBubble.classList.add('opacity-show')
   }
 }
+
 function hiddenTipBubble(e) {
   const targetInfo = {
     id: e.target.id.split('=')[0],
@@ -203,46 +233,17 @@ document
       console.log('已过滤非jpg/jpeg/png/gif/svg/webp 的文件')
     }
 
+    insertBeforeDom(filterRes)
+
     let formData = new FormData()
-
     filterRes.forEach(f => formData.append('file_list', f))
-
     const res = await uploadFilesAPI(formData)
 
-    if (res.status == 200) {
+    if (res?.status == 200) {
       fileListRef.innerHTML = ''
       initFileList()
     }
   })
-
-// console.log('draggableRef', draggableRef)
-// // 当文件在目标元素内移动时
-// draggableRef.addEventListener('dragover', function (e) {
-//   // 阻止事件冒泡
-//   e.stopPropagation()
-//   // 阻止默认事件（与drop事件结合，阻止拖拽文件在浏览器打开的默认行为）
-//   e.preventDefault()
-// })
-// // 当拖拽文件在目标元素内松开时
-// draggableRef.addEventListener('drop', function (e) {
-//   // 阻止事件冒泡
-//   e.stopPropagation()
-//   // 阻止默认事件（与dragover事件结合，阻止拖拽文件在浏览器打开的默认行为）
-//   e.preventDefault()
-//   console.log('dataTransfer', e.dataTransfer)
-//   // 获取拖拽上传的文件（files是个数组 此处默认限制只能上传一个）
-//   console.log('获取拖拽上传的文件---', e.dataTransfer.files[0])
-//   // 第二次验证选择的文件类型是否正确
-//   if (
-//     e.dataTransfer.files[0].type == 'application/msword' ||
-//     e.dataTransfer.files[0].type ==
-//       'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-//   ) {
-//     file = e.dataTransfer.files[0]
-//   } else {
-//     alert('请选择正确的文件类型')
-//   }
-// })
 
 // 获取dom元素
 // let draggableRef = document.getElementById("drop")
@@ -256,9 +257,6 @@ async function handleEvent(event) {
 
     // 文件数组
     let fileArr = []
-    // 文件流数组
-    let fileBlodArr = []
-
     console.log('event.dataTransfer.files', event.dataTransfer.files)
     for (let file of event.dataTransfer.files) {
       // 把文件保存到文件数组中
@@ -285,6 +283,8 @@ async function handleEvent(event) {
     if (filterRes.length != event.dataTransfer.files.length) {
       console.log('已过滤非jpg/jpeg/png/gif/svg/webp 的文件')
     }
+
+    insertBeforeDom(filterRes)
 
     let formData = new FormData()
 
