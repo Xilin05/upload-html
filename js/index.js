@@ -200,6 +200,49 @@ function hiddenTipBubble(e) {
   }
 }
 
+function dealUpload(payload) {
+  const { event, fileList = [] } = payload
+
+  console.log('event', event)
+  console.log('fileList', fileList)
+  if (!fileList?.length || fileList?.[0] == undefined) {
+    alert('未上传任何文件！')
+
+    return
+  }
+
+  let enumMimetType = [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/svg+xml',
+    'image/webp'
+  ]
+
+  let filterRes = fileList.filter(f => enumMimetType.includes(f.type))
+  if (!filterRes.length) {
+    alert('当前仅支持上传 jpg/jpeg/png/gif/svg/webp 的文件')
+    return
+  }
+
+  if (filterRes.length != event.target.files.length) {
+    console.log('已过滤非jpg/jpeg/png/gif/svg/webp 的文件')
+  }
+
+  insertBeforeDom(filterRes)
+
+  compressImg(filterRes)
+
+  // let formData = new FormData()
+  // filterRes.forEach(f => formData.append('file_list', f))
+  // const res = await uploadFilesAPI(formData)
+
+  // if (res?.status == 200) {
+  //   fileListRef.innerHTML = ''
+  //   initFileList()
+  // }
+}
+
 document.getElementById('uploadBtnRef').addEventListener('click', e => {
   uploadInputRef.click()
 })
@@ -207,42 +250,7 @@ document.getElementById('uploadBtnRef').addEventListener('click', e => {
 document
   .getElementById('uploadInputRef')
   .addEventListener('change', async (e, d, c) => {
-    let fileList = Array.from(e.target.files)
-
-    if (!fileList?.length || fileList?.[0] == undefined) {
-      alert('未上传任何文件！')
-
-      return
-    }
-
-    let enumMimetType = [
-      'image/jpeg',
-      'image/png',
-      'image/gif',
-      'image/svg+xml',
-      'image/webp'
-    ]
-
-    let filterRes = fileList.filter(f => enumMimetType.includes(f.type))
-    if (!filterRes.length) {
-      alert('当前仅支持上传 jpg/jpeg/png/gif/svg/webp 的文件')
-      return
-    }
-
-    if (filterRes.length != e.target.files.length) {
-      console.log('已过滤非jpg/jpeg/png/gif/svg/webp 的文件')
-    }
-
-    insertBeforeDom(filterRes)
-
-    let formData = new FormData()
-    filterRes.forEach(f => formData.append('file_list', f))
-    const res = await uploadFilesAPI(formData)
-
-    if (res?.status == 200) {
-      fileListRef.innerHTML = ''
-      initFileList()
-    }
+    dealUpload({ event: e, fileList: Array.from(e.target.files) })
   })
 
 // 获取dom元素
@@ -286,15 +294,16 @@ async function handleEvent(event) {
 
     insertBeforeDom(filterRes)
 
-    let formData = new FormData()
+    compressImg(filterRes)
+    // let formData = new FormData()
 
-    filterRes.forEach(f => formData.append('file_list', f))
-    const res = await uploadFilesAPI(formData)
+    // filterRes.forEach(f => formData.append('file_list', f))
+    // const res = await uploadFilesAPI(formData)
 
-    if (res.status == 200) {
-      fileListRef.innerHTML = ''
-      initFileList()
-    }
+    // if (res.status == 200) {
+    //   fileListRef.innerHTML = ''
+    //   initFileList()
+    // }
   } else if (event.type === 'dragleave') {
     // 离开时边框恢复
     draggableRef.style.borderColor = '#a89b9b'
