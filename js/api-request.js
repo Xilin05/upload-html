@@ -1,3 +1,14 @@
+async function getVersionApi() {
+  const { status, msg, data } = await fetchAjax('/system/version')
+
+  if (status === 200) {
+    // alert('请求成功')
+    return data
+  }
+
+  return null
+}
+
 async function getFileListAPI() {
   // 🤠发送POST请求,获取json数据
   // const result = await fetchAjax('https://api.github.com/users/Xilin05')

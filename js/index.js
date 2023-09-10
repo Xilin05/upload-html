@@ -1,3 +1,26 @@
+document.addEventListener(
+  'DOMContentLoaded',
+  async function () {
+    let versionInfo = await getVersionInfo()
+    console.log('DOMContentLoaded', versionInfo)
+    let storageVersion = localStorage.getItem('version')
+    if (storageVersion) {
+      if (storageVersion != versionInfo?.current_version) {
+        alert('检测到新版本，即将自动强制刷新')
+        localStorage.setItem('version', versionInfo?.current_version)
+      }
+    } else {
+      localStorage.setItem('version', versionInfo?.current_version)
+      window.location.reload(true)
+    }
+  },
+  false
+)
+
+async function getVersionInfo() {
+  return await getVersionApi()
+}
+
 async function initFileList() {
   fileList = await getFileListAPI()
   if (fileList.length) {
@@ -10,12 +33,6 @@ async function initFileList() {
 
 initFileList()
 // console.log('qiniu', qiniu)
-
-// 简单版上传功能实现：
-// 1. 前端页面实现
-// 2. 服务端：单文件上传，多文件上传
-// 3. 服务端：文件重命名，获取静态文件列表
-// 4.
 
 // 1. 编写服务端鉴权
 // 2. 前端获取token
