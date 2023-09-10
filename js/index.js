@@ -1,5 +1,5 @@
 async function initFileList() {
-  // fileList = await getFileListAPI()
+  fileList = await getFileListAPI()
   if (fileList.length) {
     insertHTMLDOM(fileList)
   }
