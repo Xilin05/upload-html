@@ -52,7 +52,9 @@
           </button>
         </div>
 
-        <div id="fileListRef" class="file-list-box"></div>
+        <div id="fileListRef" class="file-list-box">
+          <div id="emptyTipRef" class="empty-files"></div>
+        </div>
       </div>
     </div>
 
@@ -103,6 +105,11 @@
     <script src="./js/image.js"></script>
     <script src="./js/utils.js"></script>
     <script>
+      // 需求：jpg，gif，png需要压缩
+      // jpg、gif：canvas压缩方法
+      // png：UPNG.js 库进行压缩
+
+      // 传给后端：{ file_list: [], compress_file_list: [] }
       var fileList = []
       var tempDomIds = []
       var imagesViewer = new Viewer(document.body, {

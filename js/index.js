@@ -1,6 +1,5 @@
 async function initFileList() {
-  fileList = await getFileListAPI()
-
+  // fileList = await getFileListAPI()
   if (fileList.length) {
     insertHTMLDOM(fileList)
   }
@@ -33,13 +32,13 @@ function initDomStr(payload) {
       <use xlink:href="#icon-Excel"></use>
     </svg>
     <div id="img-box" class="img-viewer" style="background-color: #464646; background: url('${
-      payload?.img_url
+      payload?.img_url_temp
     }') no-repeat; background-size: cover; background-position: center;">
       <img
         loading="lazy"
         id="imageViewerRef-${payload?.uid}"
         data-original="${payload?.img_url}"
-        src="${payload?.img_url}"
+        src="${payload?.img_url_temp}"
         alt="${payload?.name}"
         style="opacity: 0;"
       />
@@ -48,7 +47,7 @@ function initDomStr(payload) {
       <div class="name">
         ${payload?.name}
       </div>
-      <div class="size">${payload?.size}</div>
+      <div class="size">${payload?.create_time} - ${payload?.size}</div>
     </div>
     <div class="file-operations">
       <i id="download-btn=${payload?.uid}" class="${
@@ -101,8 +100,10 @@ function asyncOnload(file) {
         preview: true,
         uid: GenNonDuplicateID(),
         img_url: event.target.result,
+        img_url_temp: event.target.result,
         size: formatSize(file?.size),
-        name: file?.name
+        name: file?.name,
+        create_time: new Date().toLocaleString()
       }
 
       if (initDomStr(info)) {
@@ -200,11 +201,20 @@ function hiddenTipBubble(e) {
   }
 }
 
-function dealUpload(payload) {
+function progressFunction(e) {
+  if (e.lengthComputable) {
+    // 获取百分制的进度
+    percent = Math.round((e.loaded / e.total) * 100)
+    // 长度根据进度条的总长度等比例扩大
+    probg.style.width = (progress.clientWidth / 100) * percent + 'px'
+    // 进度数值按百分制来
+    percentInfo.innerHTML = '上传进度：' + percent + '%'
+  }
+}
+
+async function dealUpload(payload) {
   const { event, fileList = [] } = payload
 
-  console.log('event', event)
-  console.log('fileList', fileList)
   if (!fileList?.length || fileList?.[0] == undefined) {
     alert('未上传任何文件！')
 
@@ -231,7 +241,7 @@ function dealUpload(payload) {
 
   insertBeforeDom(filterRes)
 
-  compressImg(filterRes)
+  // compressImg(filterRes)
 
   // let formData = new FormData()
   // filterRes.forEach(f => formData.append('file_list', f))
