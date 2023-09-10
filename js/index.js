@@ -1,7 +1,10 @@
 async function initFileList() {
   fileList = await getFileListAPI()
   if (fileList.length) {
+    emptyTipRef.classList.add('hidden')
     insertHTMLDOM(fileList)
+  } else {
+    emptyTipRef.classList.remove('hidden')
   }
 }
 
@@ -123,6 +126,9 @@ async function insertBeforeDom(fileList) {
     const f = fileList[index]
     tempStr += await asyncOnload(f)
   }
+
+  emptyTipRef.classList.add('hidden')
+
   fileListRef.insertAdjacentHTML('afterbegin', tempStr)
 }
 
@@ -201,19 +207,8 @@ function hiddenTipBubble(e) {
   }
 }
 
-function progressFunction(e) {
-  if (e.lengthComputable) {
-    // 获取百分制的进度
-    percent = Math.round((e.loaded / e.total) * 100)
-    // 长度根据进度条的总长度等比例扩大
-    probg.style.width = (progress.clientWidth / 100) * percent + 'px'
-    // 进度数值按百分制来
-    percentInfo.innerHTML = '上传进度：' + percent + '%'
-  }
-}
-
 async function dealUpload(payload) {
-  const { event, fileList = [] } = payload
+  const { event, originLength = 0, fileList = [] } = payload
 
   if (!fileList?.length || fileList?.[0] == undefined) {
     alert('未上传任何文件！')
@@ -235,7 +230,7 @@ async function dealUpload(payload) {
     return
   }
 
-  if (filterRes.length != event.target.files.length) {
+  if (filterRes.length != originLength) {
     console.log('已过滤非jpg/jpeg/png/gif/svg/webp 的文件')
   }
 
@@ -243,14 +238,14 @@ async function dealUpload(payload) {
 
   // compressImg(filterRes)
 
-  // let formData = new FormData()
-  // filterRes.forEach(f => formData.append('file_list', f))
-  // const res = await uploadFilesAPI(formData)
+  let formData = new FormData()
+  filterRes.forEach(f => formData.append('file_list', f))
+  const res = await uploadFilesAPI(formData)
 
-  // if (res?.status == 200) {
-  //   fileListRef.innerHTML = ''
-  //   initFileList()
-  // }
+  if (res?.status == 200) {
+    fileListRef.innerHTML = ''
+    initFileList()
+  }
 }
 
 document.getElementById('uploadBtnRef').addEventListener('click', e => {
@@ -260,7 +255,11 @@ document.getElementById('uploadBtnRef').addEventListener('click', e => {
 document
   .getElementById('uploadInputRef')
   .addEventListener('change', async (e, d, c) => {
-    dealUpload({ event: e, fileList: Array.from(e.target.files) })
+    dealUpload({
+      event: e,
+      originLength: e.target.files,
+      fileList: Array.from(e.target.files)
+    })
   })
 
 // 获取dom元素
@@ -273,47 +272,11 @@ async function handleEvent(event) {
     // 文件进入并松开鼠标,文件边框恢复正常
     draggableRef.style.borderColor = '#a89b9b'
 
-    // 文件数组
-    let fileArr = []
-    console.log('event.dataTransfer.files', event.dataTransfer.files)
-    for (let file of event.dataTransfer.files) {
-      // 把文件保存到文件数组中
-      fileArr.push(file)
-      // 初始化文件
-      // filesToBlod(file)
-    }
-
-    let enumMimetType = [
-      'image/jpeg',
-      'image/png',
-      'image/gif',
-      'image/svg+xml',
-      'image/webp'
-    ]
-
-    let filterRes = fileArr.filter(f => enumMimetType.includes(f.type))
-
-    if (!filterRes.length) {
-      alert('当前仅支持上传 jpg/jpeg/png/gif/svg/webp 的文件')
-      return
-    }
-
-    if (filterRes.length != event.dataTransfer.files.length) {
-      console.log('已过滤非jpg/jpeg/png/gif/svg/webp 的文件')
-    }
-
-    insertBeforeDom(filterRes)
-
-    compressImg(filterRes)
-    // let formData = new FormData()
-
-    // filterRes.forEach(f => formData.append('file_list', f))
-    // const res = await uploadFilesAPI(formData)
-
-    // if (res.status == 200) {
-    //   fileListRef.innerHTML = ''
-    //   initFileList()
-    // }
+    dealUpload({
+      event,
+      originLength: event.dataTransfer.files.length,
+      fileList: Array.from(event.dataTransfer.files)
+    })
   } else if (event.type === 'dragleave') {
     // 离开时边框恢复
     draggableRef.style.borderColor = '#a89b9b'
